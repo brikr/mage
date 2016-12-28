@@ -42,10 +42,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.BorderFactory;
@@ -62,6 +59,9 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileFilter;
+
+import mage.cards.repository.ExpansionInfo;
+import mage.cards.repository.ExpansionRepository;
 import mage.client.MageFrame;
 import mage.client.SessionHandler;
 import mage.client.components.KeyBindButton;
@@ -116,6 +116,8 @@ public class PreferencesDialog extends javax.swing.JDialog {
 
     public static final String KEY_GAME_LOG_AUTO_SAVE = "gameLogAutoSave";
     public static final String KEY_DRAFT_LOG_AUTO_SAVE = "draftLogAutoSave";
+
+    public static final String KEY_IMPORTER_PREFERRED_BASIC_LANDS = "importerPreferredBasicLands";
 
     public static final String KEY_CARD_IMAGES_USE_DEFAULT = "cardImagesUseDefault";
     public static final String KEY_CARD_IMAGES_PATH = "cardImagesPath";
@@ -381,6 +383,13 @@ public class PreferencesDialog extends javax.swing.JDialog {
 
         cbPreferedImageLanguage.setModel(new DefaultComboBoxModel<>(new String[]{"en", "de", "fr", "it", "es", "pt", "jp", "cn", "ru", "tw", "ko"}));
         cbNumberOfDownloadThreads.setModel(new DefaultComboBoxModel<>(new String[]{"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"}));
+
+        ArrayList<String> sets = new ArrayList<>();
+        sets.add("Default");
+        for (ExpansionInfo set : ExpansionRepository.instance.getSetsWithBasicLandsByReleaseDate()) {
+            sets.add(set.getCode() + " - " + set.getName());
+        }
+        cbPreferredBasicLands.setModel(new DefaultComboBoxModel<>(sets.toArray()));
     }
 
     /**
@@ -410,6 +419,9 @@ public class PreferencesDialog extends javax.swing.JDialog {
         main_gamelog = new javax.swing.JPanel();
         cbGameLogAutoSave = new javax.swing.JCheckBox();
         cbDraftLogAutoSave = new javax.swing.JCheckBox();
+        main_deckimporter = new javax.swing.JPanel();
+        labelPreferredBasicLands = new javax.swing.JLabel();
+        cbPreferredBasicLands = new javax.swing.JComboBox();
         tabGuiSize = new javax.swing.JPanel();
         guiSizeBasic = new javax.swing.JPanel();
         sliderFontSize = new javax.swing.JSlider();
@@ -716,7 +728,7 @@ public class PreferencesDialog extends javax.swing.JDialog {
                     .add(cbAllowRequestToShowHandCards, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(cbShowStormCounter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(cbAskMoveToGraveOrder, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(255, Short.MAX_VALUE))
         );
         main_gameLayout.setVerticalGroup(
             main_gameLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -768,7 +780,7 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 .add(main_gamelogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(cbDraftLogAutoSave, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(cbGameLogAutoSave, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(335, Short.MAX_VALUE))
         );
         main_gamelogLayout.setVerticalGroup(
             main_gamelogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -776,6 +788,30 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 .add(cbGameLogAutoSave)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbDraftLogAutoSave))
+        );
+
+        main_deckimporter.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Deck importer"));
+
+        labelPreferredBasicLands.setText("Preferred Basic Lands:");
+
+        cbPreferredBasicLands.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        org.jdesktop.layout.GroupLayout main_deckimporterLayout = new org.jdesktop.layout.GroupLayout(main_deckimporter);
+        main_deckimporter.setLayout(main_deckimporterLayout);
+        main_deckimporterLayout.setHorizontalGroup(
+            main_deckimporterLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(main_deckimporterLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(labelPreferredBasicLands)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(cbPreferredBasicLands, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 250, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        main_deckimporterLayout.setVerticalGroup(
+            main_deckimporterLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(main_deckimporterLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(labelPreferredBasicLands)
+                .add(cbPreferredBasicLands, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
 
         org.jdesktop.layout.GroupLayout tabMainLayout = new org.jdesktop.layout.GroupLayout(tabMain);
@@ -787,7 +823,8 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 .add(tabMainLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, main_card, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, main_gamelog, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(main_game, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(main_game, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(main_deckimporter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         tabMainLayout.setVerticalGroup(
@@ -799,7 +836,9 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 .add(main_game, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(main_gamelog, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(main_deckimporter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(154, Short.MAX_VALUE))
         );
 
         main_card.getAccessibleContext().setAccessibleName("Game panel");
@@ -2771,6 +2810,9 @@ public class PreferencesDialog extends javax.swing.JDialog {
         save(prefs, dialog.cbUseDefaultBattleImage, KEY_BATTLEFIELD_IMAGE_DEFAULT, "true", "false", UPDATE_CACHE_POLICY);
         save(prefs, dialog.cbUseRandomBattleImage, KEY_BATTLEFIELD_IMAGE_RANDOM, "true", "false", UPDATE_CACHE_POLICY);
 
+        // importer
+        save(prefs, dialog.cbPreferredBasicLands, KEY_IMPORTER_PREFERRED_BASIC_LANDS);
+
         // rendering
         save(prefs, dialog.cbCardRenderImageFallback, KEY_CARD_RENDERING_FALLBACK, "true", "false", UPDATE_CACHE_POLICY);
         save(prefs, dialog.cbCardRenderHideSetSymbol, KEY_CARD_RENDERING_SET_SYMBOL, "true", "false", UPDATE_CACHE_POLICY);
@@ -3220,6 +3262,8 @@ public class PreferencesDialog extends javax.swing.JDialog {
 
         load(prefs, dialog.cbGameLogAutoSave, KEY_GAME_LOG_AUTO_SAVE, "true");
         load(prefs, dialog.cbDraftLogAutoSave, KEY_DRAFT_LOG_AUTO_SAVE, "true");
+
+        dialog.cbPreferredBasicLands.setSelectedItem(prefs.get(KEY_IMPORTER_PREFERRED_BASIC_LANDS, "Default"));
 
         load(prefs, dialog.checkBoxUpkeepYou, UPKEEP_YOU, "on", "on");
         load(prefs, dialog.checkBoxDrawYou, DRAW_YOU, "on", "on");
@@ -3756,6 +3800,7 @@ public class PreferencesDialog extends javax.swing.JDialog {
     private javax.swing.JCheckBox cbPassPriorityActivation;
     private javax.swing.JCheckBox cbPassPriorityCast;
     private javax.swing.JComboBox<String> cbPreferedImageLanguage;
+    private javax.swing.JComboBox cbPreferredBasicLands;
     private javax.swing.JComboBox<ProxyType> cbProxyType;
     private javax.swing.JCheckBox cbSaveToZipFiles;
     private javax.swing.JCheckBox cbShowStormCounter;
@@ -3853,6 +3898,7 @@ public class PreferencesDialog extends javax.swing.JDialog {
     private javax.swing.JLabel labelNextTurn;
     private javax.swing.JLabel labelNumberOfDownloadThreads;
     private javax.swing.JLabel labelPreferedImageLanguage;
+    private javax.swing.JLabel labelPreferredBasicLands;
     private javax.swing.JLabel labelPriorEnd;
     private javax.swing.JLabel labelSkipStep;
     private javax.swing.JLabel labelStackWidth;
@@ -3866,6 +3912,7 @@ public class PreferencesDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblURLServerList;
     private javax.swing.JLabel lebelSkip;
     private javax.swing.JPanel main_card;
+    private javax.swing.JPanel main_deckimporter;
     private javax.swing.JPanel main_game;
     private javax.swing.JPanel main_gamelog;
     private javax.swing.JCheckBox nonLandPermanentsInOnePile;

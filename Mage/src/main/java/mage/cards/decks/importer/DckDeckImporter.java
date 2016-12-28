@@ -74,7 +74,7 @@ public class DckDeckImporter extends DeckImporter {
                 // Try alternate based on name
                 String cardName = m.group(5);
                 if (cardName != null && cardName.length() > 0) {
-                    cardInfo = CardRepository.instance.findPreferedCoreExpansionCard(cardName, false);
+                    cardInfo = CardRepository.instance.findPreferredCoreExpansionCard(cardName, false);
                     sbMessage.append("Could not find card '").append(cardName).append("' in set ").append(setCode).append(" of number ").append(cardNum).append(".\n");
                     if (cardInfo != null) {
                         sbMessage.append("Made substitution of ").append(cardInfo.getCardNumber()).append(", ").append(cardInfo.getCard().getExpansionSetCode()).append(" instead.\n");

@@ -28,7 +28,7 @@
 package mage.cards.decks.importer;
 
 import java.util.List;
-import java.util.Random;
+
 import mage.cards.decks.DeckCardInfo;
 import mage.cards.decks.DeckCardLists;
 import mage.cards.repository.CardCriteria;
@@ -76,7 +76,7 @@ public class MWSDeckImporter extends DeckImporter {
                 }
             } 
             if (cardInfo == null) {
-                cardInfo = CardRepository.instance.findPreferedCoreExpansionCard(lineName, true);
+                cardInfo = CardRepository.instance.findPreferredCoreExpansionCard(lineName, true);
             }
 
             if (cardInfo == null) {

@@ -29,7 +29,7 @@ package mage.game.draft;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 import mage.cards.Card;
 import mage.cards.repository.CardCriteria;
 import mage.cards.repository.CardInfo;
@@ -112,7 +112,7 @@ public abstract class DraftCube {
                             cardInfo = cardList.get(0);
                         }
                     } else {
-                        cardInfo = CardRepository.instance.findPreferedCoreExpansionCard(cardId.getName(), false);
+                        cardInfo = CardRepository.instance.findPreferredCoreExpansionCard(cardId.getName(), false);
                     }
 
                     if (cardInfo != null) {

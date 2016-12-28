@@ -356,13 +356,29 @@ public enum CardRepository {
         return null;
     }
 
-    public CardInfo findPreferedCoreExpansionCard(String name, boolean caseInsensitive) {
+    public CardInfo findPreferredCoreExpansionCard(String name, boolean caseInsensitive) {
         List<CardInfo> cards;
         if (caseInsensitive) {
             cards = findCardsCaseInsensitive(name);
         } else {
             cards = findCards(name);
         }
+
+        // preferred basic lands
+        if (Arrays.asList("plains", "island", "swamp", "mountain", "forest").contains(name.toLowerCase())) {
+            //TODO: find a way to access preferences from here
+//            String setCode = MageFrame.getPreferences().get("importerPreferredBasicLands", null);
+            String setCode = "UNH - Unhinged";
+            if (setCode != null) {
+                setCode = setCode.split("")[0];
+                for(CardInfo cardinfo : cards) {
+                    if (cardinfo.getSetCode().equals(setCode)) {
+                        return cardinfo;
+                    }
+                }
+            }
+        }
+
         if (!cards.isEmpty()) {
             Date lastReleaseDate = null;
             Date lastExpansionDate = null;

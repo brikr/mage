@@ -87,7 +87,7 @@ public class TxtDeckImporter extends DeckImporter {
         }
         try {
             int num = Integer.parseInt(lineNum.replaceAll("\\D+", ""));
-            CardInfo cardInfo = CardRepository.instance.findPreferedCoreExpansionCard(lineName, true);
+            CardInfo cardInfo = CardRepository.instance.findPreferredCoreExpansionCard(lineName, true);
             if (cardInfo == null) {
                 sbMessage.append("Could not find card: '").append(lineName).append("' at line ").append(lineCount).append("\n");
             } else {
